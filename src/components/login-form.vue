@@ -15,7 +15,8 @@
       </Input>
     </FormItem>
     <FormItem>
-      <Button @click="handleSubmit" type="primary" long>登录</Button>
+      <Button style="margin-bottom: 10px" @click="handleSubmit" type="primary" long>登录</Button>
+      <Button @click="createSubmit" type="warning" long>注册</Button>
     </FormItem>
   </Form>
 </template>

@@ -8,7 +8,7 @@ export default new VueRouter({
     {
       path: '/',
       name: 'login',
-      component: resolve => require(['@/views/login.vue'], resolve) // 注：此处容易跟着代码提示一不小心写成components
+      component: resolve => require(['@/views/Login/login.vue'], resolve) // 注：此处容易跟着代码提示一不小心写成components
     }
   ]
 })

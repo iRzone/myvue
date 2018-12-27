@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "iview": "^3.2.1",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
@@ -33,7 +34,11 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "vetur.validation.template": false,
+      "generator-star-spacing": "off",
+      "vue/html-self-closing": "off"
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
