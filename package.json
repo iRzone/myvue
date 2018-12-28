@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "base-64": "^0.1.0",
     "iview": "^3.2.1",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
@@ -37,7 +38,14 @@
     "rules": {
       "vetur.validation.template": false,
       "generator-star-spacing": "off",
-      "vue/html-self-closing": "off"
+      "vue/html-self-closing": "off",
+      "no-console": "off",
+      "vue/no-parsing-error": [
+        2,
+        {
+          "x-invalid-end-tag": false
+        }
+      ]
     },
     "parserOptions": {
       "parser": "babel-eslint"

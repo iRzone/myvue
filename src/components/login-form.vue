@@ -21,6 +21,14 @@
   </Form>
 </template>
 <script>
+import instance from '@/libs/util.js'
+import Base64 from 'base-64'
+
+const api = {
+  CreateUser: '/users/add',
+  Login: '/users/login'
+}
+
 export default {
   name: 'LoginForm',
   props: {
@@ -44,7 +52,7 @@ export default {
   data () {
     return {
       form: {
-        userName: 'super_admin',
+        userName: 'iRzone',
         password: ''
       }
     }
@@ -59,14 +67,17 @@ export default {
   },
   methods: {
     handleSubmit () {
-      this.$refs.loginForm.validate((valid) => {
-        if (valid) {
-          this.$emit('on-success-valid', {
-            userName: this.form.userName,
-            password: this.form.password
-          })
-        }
+      console.log(Base64.encode(this.form.password))
+      const params = {
+        UserName: this.form.userName,
+        PassWord: Base64.encode(this.form.password)
+      }
+      instance.post(api.Login, { params }).then(res => {
+        console.log(res)
       })
+    },
+    createSubmit () {
+      
     }
   }
 }
