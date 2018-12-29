@@ -65,6 +65,20 @@ export default {
       }
     }
   },
+  mounted () {
+    const header = {
+      "typ": "JWT",
+      "alg": "HS256"
+    }
+    const Payload = {
+      "iss": "iRzone.net",
+      "exp": "1438955445",
+      "name": "wddlzb",
+      "admin": true
+    }
+    console.log(`header:${Base64.encode(JSON.stringify(header))}`)
+    console.log(`Payload:${Base64.encode(JSON.stringify(Payload))}`)
+  },
   methods: {
     handleSubmit () {
       console.log(Base64.encode(this.form.password))
