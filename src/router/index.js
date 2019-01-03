@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Main from '@/views/Main/main.vue'
 
 Vue.use(VueRouter)
 
@@ -9,6 +10,33 @@ export default new VueRouter({
       path: '/',
       name: 'login',
       component: resolve => require(['@/views/Login/login.vue'], resolve) // 注：此处容易跟着代码提示一不小心写成components
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: resolve => require(['@/views/Home/home.vue'], resolve)
+    },
+    {
+      path: '/about',
+      component: Main,
+      children: [
+        {
+          path: 'us',
+          name:  'us',
+          component: resolve => require(['@/views/AboutUs/about-us.vue'], resolve)
+        }
+      ]
+    },
+    {
+      path: '/news',
+      component: Main,
+      children: [
+        {
+          path: 'new',
+          name:  'new',
+          component: resolve => require(['@/views/News/news.vue'], resolve)
+        }
+      ]
     }
   ]
 })
