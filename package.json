@@ -11,6 +11,7 @@
     "axios": "^0.18.0",
     "base-64": "^0.1.0",
     "iview": "^3.2.1",
+    "jsonwebtoken": "^8.4.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "mousetrap": "^1.6.2",
