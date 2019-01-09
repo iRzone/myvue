@@ -13,15 +13,21 @@ export default new VueRouter({
     },
     {
       path: '/home',
-      name: 'home',
-      component: resolve => require(['@/views/Home/home.vue'], resolve)
+      component: Main,
+      children: [
+        {
+          path: '',
+          name: 'home',
+          component: resolve => require(['@/views/Home/home.vue'], resolve)
+        }
+      ]
     },
     {
       path: '/about',
       component: Main,
       children: [
         {
-          path: 'us',
+          path: '',
           name:  'us',
           component: resolve => require(['@/views/AboutUs/about-us.vue'], resolve)
         }
@@ -32,7 +38,7 @@ export default new VueRouter({
       component: Main,
       children: [
         {
-          path: 'new',
+          path: '',
           name:  'new',
           component: resolve => require(['@/views/News/news.vue'], resolve)
         }

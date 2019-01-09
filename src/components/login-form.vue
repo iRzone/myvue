@@ -24,8 +24,9 @@
 import instance from '@/libs/util.js'
 import Base64 from 'base-64'
 
+var cookies = require('js-cookie')
 const api = {
-  CreateUser: '/users/add',
+  CreateUser: '/users/register',
   Login: '/users/login'
 }
 
@@ -65,33 +66,30 @@ export default {
       }
     }
   },
-  mounted () {
-    const header = {
-      "typ": "JWT",
-      "alg": "HS256"
-    }
-    const Payload = {
-      "iss": "iRzone.net",
-      "exp": "1438955445",
-      "name": "wddlzb",
-      "admin": true
-    }
-    console.log(`header:${Base64.encode(JSON.stringify(header))}`)
-    console.log(`Payload:${Base64.encode(JSON.stringify(Payload))}`)
-  },
   methods: {
     handleSubmit () {
-      console.log(Base64.encode(this.form.password))
       const params = {
         UserName: this.form.userName,
         PassWord: Base64.encode(this.form.password)
       }
       instance.post(api.Login, { params }).then(res => {
-        console.log(res)
+        if (res.data.Code === 200) {
+          cookies.set('token', res.data.token, { expires: 3 })
+          this.$Message.success('登录成功')
+          this.$router.push({name: 'home'})
+        }
       })
     },
     createSubmit () {
-      
+      const params = {
+        UserName: this.form.userName,
+        PassWord: Base64.encode(this.form.password)
+      }
+      instance.post(api.CreateUser, { params }).then(res => {
+        if (res.data.Code === 200) {
+          this.$Message.success('注册成功')
+        }
+      })
     }
   }
 }
