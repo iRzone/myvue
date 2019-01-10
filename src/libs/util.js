@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import cookie from 'js-cookie'
 
 var instance = axios.create({
   baseURL: 'http://localhost:3000/',
@@ -11,8 +11,10 @@ var instance = axios.create({
 // 添加请求拦截器
 instance.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
-
-  console.log(config.headers.Authorization)
+  let token = cookie.get('token')
+  if (token) {
+    config.headers.Authorization = token
+  }
   return config;
 }, function (error) {
   // 对请求错误做些什么
