@@ -1,5 +1,5 @@
 <template>
   <Card>
-    123456
+    about us
   </Card>
 </template>

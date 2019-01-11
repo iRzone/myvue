@@ -23,6 +23,7 @@
 <script>
 import instance from '@/libs/util.js'
 import Base64 from 'base-64'
+// import { mapState } from 'vuex'
 
 var cookies = require('js-cookie')
 const api = {
@@ -53,18 +54,24 @@ export default {
   data () {
     return {
       form: {
-        userName: 'iRzone',
+        userName: '',
         password: ''
       }
     }
   },
   computed: {
+    // ...mapState({
+    //   breadcumb: state => state.breadcumb
+    // }),
     rules () {
       return {
         userName: this.userNameRules,
         password: this.passwordRules
       }
     }
+  },
+  mounted () {
+    // console.log(this.$store.state.breadcumb)
   },
   methods: {
     handleSubmit () {
@@ -76,7 +83,13 @@ export default {
         if (res.data.Code === 200) {
           cookies.set('token', res.data.token, { expires: 3 })
           this.$Message.success('登录成功')
-          this.$router.push({name: 'home'})
+          if (res.data.Data.Admin === 1) {
+            this.$router.push({name: 'admin_home'})
+          } else {
+            this.$router.push({name: 'user_home'})
+          }
+          localStorage.setItem('UesrMsg', JSON.stringify(res.data.Data))
+          this.init()
         }
       })
     },
@@ -88,8 +101,12 @@ export default {
       instance.post(api.CreateUser, { params }).then(res => {
         if (res.data.Code === 200) {
           this.$Message.success('注册成功')
+          this.init()
         }
       })
+    },
+    init () {
+      this.form = Object.assign(this.form, this.$options.data().form)
     }
   }
 }

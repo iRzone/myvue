@@ -1,6 +1,6 @@
 <template>
   <Card>
-    456789
+    news
   </Card>
 </template>
 
