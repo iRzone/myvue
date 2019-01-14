@@ -8,7 +8,7 @@ const user_routes = [
     children: [
       {
         path: '',
-        name: 'home',
+        name: 'user_home',
         component: resolve => require(['@/views/User/Home/home.vue'], resolve)
       }
     ]

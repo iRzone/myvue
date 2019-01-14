@@ -1,93 +1,105 @@
 <template>
-  <!-- <div>
-    <div class="top">
-      <div class="lineBox"></div>
-      <div class="logo">
-        <img src="@/assets/images/logo.png">
-      </div>
-      <div class="lineBox"></div>
-    </div>
-    <Menu class="menus" mode="horizontal" theme="dark" active-name="home" @on-select="optionLink">
-      <MenuItem name="user_home">
-        <Icon type="ios-home" />
-        首页
-      </MenuItem>
-      <MenuItem name="new">
-        <Icon type="ios-document" />
-        新闻
-      </MenuItem>
-      <MenuItem name="us">
-        <Icon type="ios-people" />
-        关于我们
-      </MenuItem>
-    </Menu>
-    <div class="body">
-      <router-view></router-view>
-    </div>
-    
-  </div> -->
   <div class="layout">
-      <Layout>
-        <Header>
-          <Menu mode="horizontal" theme="dark" active-name="user_home" @on-select="optionLink">
-            <div class="layout-logo">
-              <img src="@/assets/images/logo.png">
-            </div>
-            <div class="layout-nav">
-              <MenuItem name="user_home">
-                <Icon type="ios-home" />
-                首页
-              </MenuItem>
-              <MenuItem name="new">
-                <Icon type="ios-document" />
-                沙雕新闻
-              </MenuItem>
-              <MenuItem name="us">
-                <Icon type="ios-people" />
-                关于我们
-              </MenuItem>
-            </div>
-          </Menu>
-        </Header>
-        <Content :style="{padding: '0 50px'}">
-          <Breadcrumb :style="{margin: '20px 0'}">
-            <BreadcrumbItem>Home</BreadcrumbItem>
-            <BreadcrumbItem>Components</BreadcrumbItem>
-            <BreadcrumbItem>Layout</BreadcrumbItem>
-          </Breadcrumb>
-          <div>
-            <router-view></router-view>
+    <Layout>
+      <Header>
+        <Menu mode="horizontal" theme="dark" active-name="user_home" @on-select="optionLink">
+          <div class="layout-logo">
+            <img src="@/assets/images/logo.png">
           </div>
-        </Content>
-        <Footer class="layout-footer-center">2011 - {{ thisYear }} &copy; by DOSH.</Footer>
-      </Layout>
-      <Modal v-model="visible" title="恭喜发现彩蛋！">
-        <p>Surprise Mother Fucker.</p>
-      </Modal>
-    </div>
+          <div class="layout-nav">
+            <MenuItem name="user_home">
+              <Icon type="ios-home" />
+              首页
+            </MenuItem>
+            <MenuItem name="new">
+              <Icon type="ios-document" />
+              沙雕新闻
+            </MenuItem>
+            <MenuItem name="us">
+              <Icon type="ios-people" />
+              关于我们
+            </MenuItem>
+            <Submenu name="user_avatar">
+              <template slot="title">
+                <Avatar src="https://i.loli.net/2019/01/11/5c384fc809967.jpg" />&nbsp;
+                {{ admin }}
+              </template>
+              <MenuGroup title="使用">
+                <MenuItem name="3-1">新增和启动</MenuItem>
+                <MenuItem name="3-2">活跃分析</MenuItem>
+                <MenuItem name="3-3">时段分析</MenuItem>
+              </MenuGroup>
+              <MenuGroup title="留存">
+                <MenuItem name="3-4">用户留存</MenuItem>
+                <MenuItem name="3-5">流失用户</MenuItem>
+              </MenuGroup>
+            </Submenu>
+          </div>
+        </Menu>
+      </Header>
+      <Content :style="{padding: '0 50px'}">
+        <Breadcrumb :style="{margin: '20px 0'}">
+          <BreadcrumbItem v-for="item in breadcumb" :key="item">{{ item }}</BreadcrumbItem>
+        </Breadcrumb>
+        <div>
+          <router-view></router-view>
+        </div>
+      </Content>
+      <Footer class="layout-footer-center">2011 - {{ thisYear }} &copy; by DOSH.</Footer>
+    </Layout>
+    <Modal v-model="visible" title="恭喜发现彩蛋！">
+      <p>Surprise Mother Fucker.</p>
+    </Modal>
+  </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
+
 const Mousetrap = require('mousetrap')
 export default {
   data () {
     return{
       visible: false,
-      thisYear: ''
+      thisYear: '',
+      admin: JSON.parse(localStorage.getItem('UesrMsg')).UserName
     }
+  },
+  computed: {
+    ...mapState({
+      breadcumb: state => state.breadcumb
+    })
   },
   mounted () {
     this.getThisYear()
     this.bindMousetrap()
   },
   methods: {
+    ...mapMutations([
+      'handleBreadcumb'
+    ]),
     bindMousetrap () {
       Mousetrap.bind('f2', () => {
         this.visible = true
       });
     },
     optionLink (e) {
-      this.$router.push({name: e})
+      let n = ''
+      switch (e) {
+        case 'user_home':
+          n = '首页'
+          break
+        case 'new':
+          n = '沙雕新闻'
+          break
+        case 'us':
+          n = '关于我们'
+          break
+      }
+      if (e !== 'user_avatar') {
+        this.$router.push({name: e})
+      }
+      this.handleBreadcumb(n)
     },
     getThisYear () {
       let date = new Date()
@@ -128,7 +140,7 @@ export default {
   }
 }
 .layout-nav{
-  width: 420px;
+  width: 482px;
   margin: 0 auto;
   margin-right: 20px;
 }
@@ -138,5 +150,4 @@ export default {
   position: absolute;
   bottom:0;
 }
-
 </style>

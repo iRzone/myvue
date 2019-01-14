@@ -23,7 +23,7 @@
 <script>
 import instance from '@/libs/util.js'
 import Base64 from 'base-64'
-// import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 var cookies = require('js-cookie')
 const api = {
@@ -60,9 +60,9 @@ export default {
     }
   },
   computed: {
-    // ...mapState({
-    //   breadcumb: state => state.breadcumb
-    // }),
+    ...mapState({
+      breadcumb: state => state.breadcumb
+    }),
     rules () {
       return {
         userName: this.userNameRules,
@@ -74,6 +74,9 @@ export default {
     // console.log(this.$store.state.breadcumb)
   },
   methods: {
+    ...mapMutations([
+      'handleBreadcumb', 'clearBreadcumb'
+    ]),
     handleSubmit () {
       const params = {
         UserName: this.form.userName,
@@ -81,6 +84,7 @@ export default {
       }
       instance.post(api.Login, { params }).then(res => {
         if (res.data.Code === 200) {
+          this.clearBreadcumb()
           cookies.set('token', res.data.token, { expires: 3 })
           this.$Message.success('登录成功')
           if (res.data.Data.Admin === 1) {
@@ -88,6 +92,7 @@ export default {
           } else {
             this.$router.push({name: 'user_home'})
           }
+          this.handleBreadcumb('首页')
           localStorage.setItem('UesrMsg', JSON.stringify(res.data.Data))
           this.init()
         }

@@ -7,18 +7,14 @@
           <img src="@/assets/images/logo.png">
         </div>
       </template>
-      <Menu active-name="admin_home" theme="dark" width="auto" :class="menuitemClasses">
+      <Menu active-name="admin_home" theme="dark" width="auto" :class="menuitemClasses" @on-select="optionLink">
         <MenuItem name="admin_home">
           <Icon type="ios-home"></Icon>
           <span>首页</span>
         </MenuItem>
-        <MenuItem name="1-2">
-          <Icon type="ios-search"></Icon>
-          <span>Option 2</span>
-        </MenuItem>
-        <MenuItem name="1-3">
-          <Icon type="ios-settings"></Icon>
-          <span>Option 3</span>
+        <MenuItem name="member">
+          <Icon type="md-person"></Icon>
+          <span>会员管理</span>
         </MenuItem>
       </Menu>
       <div slot="trigger"></div>
@@ -28,13 +24,11 @@
         <Avatar src="https://i.loli.net/2019/01/11/5c384fc809967.jpg" />&nbsp;
         管理员：{{ admin }}
       </Header>
-      <Content :style="{margin: '20px', background: '#fff', minHeight: '220px'}">
-        <Breadcrumb :style="{margin: '16px 0'}">
-          <BreadcrumbItem>Home</BreadcrumbItem>
-          <BreadcrumbItem>Components</BreadcrumbItem>
-          <BreadcrumbItem>Layout</BreadcrumbItem>
-        </Breadcrumb>
-        <router-view></router-view>
+      <Breadcrumb :style="{margin: '24px 0 0',padding: '0 24px 24px'}">
+        <BreadcrumbItem v-for="item in breadcumb" :key="item">{{ item }}</BreadcrumbItem>
+      </Breadcrumb>
+      <Content :style="{margin: '0 20px 20px 20px', background: '#fff', minHeight: '220px'}">
+        <router-view style="padding: 20px"></router-view>
       </Content>
     </Layout>
   </Layout>
@@ -42,6 +36,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -50,6 +45,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      breadcumb: state => state.breadcumb
+    }),
     menuitemClasses: function () {
       return [
         'menu-item',
@@ -58,11 +56,25 @@ export default {
     }
   },
   mounted () {
-    // this.admin = JSON.parse(localStorage.getItem('UesrMsg')).UserName
-    // console.log(this.admin)
+    // console.log(this)
   },
   methods: {
-
+    ...mapMutations([
+      'handleBreadcumb'
+    ]),
+    optionLink (e) {
+      let n = ''
+      switch (e) {
+        case 'admin_home':
+          n = '首页'
+          break
+        case 'member':
+          n = '会员管理'
+          break
+      }
+      this.$router.push({name: e})
+      this.handleBreadcumb(n)
+    }
   }
 }
 </script>

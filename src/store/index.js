@@ -13,10 +13,14 @@ const getters = { // 实时监听state值的变化(最新状态)
 
 const mutations = { // 自定义改变state初始值的方法，这里面的参数除了state之外还可以再传额外的参数(变量或对象);
   handleBreadcumb: function (state, route) {
-    if (route) {
+    if (!state.breadcumb.includes(route)) {
       state.breadcumb.push(route)
+    } else {
+      state.breadcumb.splice(state.breadcumb.indexOf(route) + 1)
     }
-    console.log(state.breadcumb)
+  },
+  clearBreadcumb: function (state) {
+    state.breadcumb = []
   }
 }
 

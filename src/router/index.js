@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import UserMain from '@/views/User/Main/main.vue'
-import AdminMain from '@/views/Admin/Main/main.vue'
+// import UserMain from '@/views/User/Main/main.vue'
+// import AdminMain from '@/views/Admin/Main/main.vue'
 import cookie from 'js-cookie'
+import admin_routes from './admin.js'
+import user_routes from './user.js'
 
 Vue.use(VueRouter)
 
@@ -18,51 +20,53 @@ const router =  new VueRouter({
       component: resolve => require(['@/views/Login/login.vue'], resolve) // 注：此处容易跟着代码提示一不小心写成components
     },
     // user
-    {
-      path: '/user_home',
-      component: UserMain,
-      children: [
-        {
-          path: '',
-          name: 'user_home',
-          component: resolve => require(['@/views/User/Home/home.vue'], resolve)
-        }
-      ]
-    },
-    {
-      path: '/about',
-      component: UserMain,
-      children: [
-        {
-          path: '',
-          name:  'us',
-          component: resolve => require(['@/views/User/AboutUs/about-us.vue'], resolve)
-        }
-      ]
-    },
-    {
-      path: '/news',
-      component: UserMain,
-      children: [
-        {
-          path: '',
-          name:  'new',
-          component: resolve => require(['@/views/User/News/news.vue'], resolve)
-        }
-      ]
-    },
+    // {
+    //   path: '/user_home',
+    //   component: UserMain,
+    //   children: [
+    //     {
+    //       path: '',
+    //       name: 'user_home',
+    //       component: resolve => require(['@/views/User/Home/home.vue'], resolve)
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: '/about',
+    //   component: UserMain,
+    //   children: [
+    //     {
+    //       path: '',
+    //       name:  'us',
+    //       component: resolve => require(['@/views/User/AboutUs/about-us.vue'], resolve)
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: '/news',
+    //   component: UserMain,
+    //   children: [
+    //     {
+    //       path: '',
+    //       name:  'new',
+    //       component: resolve => require(['@/views/User/News/news.vue'], resolve)
+    //     }
+    //   ]
+    // },
+    ...user_routes,
     // admin
-    {
-      path: '/admin_home',
-      component: AdminMain,
-      children: [
-        {
-          path: '',
-          name: 'admin_home',
-          component: resolve => require(['@/views/Admin/Home/home.vue'], resolve)
-        }
-      ]
-    }
+    // {
+    //   path: '/admin_home',
+    //   component: AdminMain,
+    //   children: [
+    //     {
+    //       path: '',
+    //       name: 'admin_home',
+    //       component: resolve => require(['@/views/Admin/Home/home.vue'], resolve)
+    //     }
+    //   ]
+    // }
+    ...admin_routes
   ]
 })
 
