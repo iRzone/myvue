@@ -15,6 +15,8 @@ instance.interceptors.request.use(function (config) {
   let token = cookie.get('token')
   if (token) {
     config.headers.Authorization = token
+    // config.headers.common['Authentication-Token'] = token
+    
   }
   return config;
 }, function (error) {
