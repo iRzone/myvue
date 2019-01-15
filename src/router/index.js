@@ -15,6 +15,8 @@ const router =  new VueRouter({
       redirect: () => {
         if (localStorage.getItem('UesrMsg')) {
           return JSON.parse(localStorage.getItem('UesrMsg')).Admin === 1? 'admin_home': 'user_home'
+        } else {
+          return '/login'
         }
       }
     },
@@ -29,7 +31,9 @@ const router =  new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  // console.log(to)
   let token = cookie.get('token')
+  // console.log(token)
   if (!token && to.name !== 'login') {
     next({
       replace: true,
