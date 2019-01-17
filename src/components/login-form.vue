@@ -1,5 +1,5 @@
 <template>
-  <Form ref="loginForm" :model="form" :rules="rules" @keydown.enter.native="handleSubmit">
+  <Form ref="loginForm" :model="form" :rules="ruleValidate" @keydown.enter.native="handleSubmit">
     <FormItem prop="userName">
       <Input v-model="form.userName" placeholder="请输入用户名">
         <span slot="prepend">
@@ -33,42 +33,40 @@ const api = {
 
 export default {
   name: 'LoginForm',
-  props: {
-    userNameRules: {
-      type: Array,
-      default: () => {
-        return [
-          { required: true, message: '账号不能为空', trigger: 'blur' }
-        ]
-      }
-    },
-    passwordRules: {
-      type: Array,
-      default: () => {
-        return [
-          { required: true, message: '密码不能为空', trigger: 'blur' }
-        ]
+  data () {
+    let validateName = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入用户名'))
+      } else {
+        callback()
       }
     }
-  },
-  data () {
+    let validatePwd = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('密码不可以为空'))
+      } else {
+        callback()
+      }
+    }
     return {
       form: {
         userName: '',
         password: ''
+      },
+      ruleValidate: {
+        userName: [
+          { required: true, validator: validateName, trigger: 'blur' }
+        ],
+        password: [
+          { required: true, validator: validatePwd, trigger: 'blur' }
+        ]
       }
     }
   },
   computed: {
     ...mapState({
       breadcumb: state => state.breadcumb
-    }),
-    rules () {
-      return {
-        userName: this.userNameRules,
-        password: this.passwordRules
-      }
-    }
+    })
   },
   mounted () {
     // console.log(this.$store.state.breadcumb)
@@ -78,35 +76,43 @@ export default {
       'handleBreadcumb', 'clearBreadcumb'
     ]),
     handleSubmit () {
-      const params = {
-        UserName: this.form.userName,
-        PassWord: Base64.encode(this.form.password)
-      }
-      instance.post(api.Login, { params }).then(res => {
-        if (res.data.Code === 200) {
-          this.clearBreadcumb()
-          cookies.set('token', res.data.token, { expires: 3 })
-          this.$Message.success('登录成功')
-          if (res.data.Data.Admin === 1) {
-            this.$router.push({name: 'admin_home'})
-          } else {
-            this.$router.push({name: 'user_home'})
+      this.$refs.loginForm.validate((valid) => {
+        if (valid) {
+          const params = {
+            UserName: this.form.userName,
+            PassWord: Base64.encode(this.form.password)
           }
-          this.handleBreadcumb('首页')
-          localStorage.setItem('UesrMsg', JSON.stringify(res.data.Data))
-          this.init()
+          instance.post(api.Login, { params }).then(res => {
+            if (res.data.Code === 200) {
+              this.clearBreadcumb()
+              cookies.set('token', res.data.token, { expires: 3 })
+              this.$Message.success('登录成功')
+              if (res.data.Data.Admin === 1) {
+                this.$router.push({name: 'admin_home'})
+              } else {
+                this.$router.push({name: 'user_home'})
+              }
+              this.handleBreadcumb('首页')
+              localStorage.setItem('UserMsg', JSON.stringify(res.data.Data))
+              this.init()
+            }
+          })
         }
       })
     },
     createSubmit () {
-      const params = {
-        UserName: this.form.userName,
-        PassWord: Base64.encode(this.form.password)
-      }
-      instance.post(api.CreateUser, { params }).then(res => {
-        if (res.data.Code === 200) {
-          this.$Message.success('注册成功')
-          this.init()
+      this.$refs.loginForm.validate((valid) => {
+        if (valid) {
+          const params = {
+            UserName: this.form.userName,
+            PassWord: Base64.encode(this.form.password)
+          }
+          instance.post(api.CreateUser, { params }).then(res => {
+            if (res.data.Code === 200) {
+              this.$Message.success('注册成功')
+              this.init()
+            }
+          })
         }
       })
     },

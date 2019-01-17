@@ -21,8 +21,14 @@
     </Sider>
     <Layout>
       <Header class="layout-header-bar">
-        <Avatar src="https://i.loli.net/2019/01/11/5c384fc809967.jpg" />&nbsp;
-        管理员：{{ admin }}
+        <Dropdown class="dropDown" placement="bottom-start" @on-click="userOperate">
+          <Avatar src="https://i.loli.net/2019/01/11/5c384fc809967.jpg" />&nbsp;
+          管理员：{{ admin }}
+          <Icon type="ios-arrow-down"></Icon>
+          <DropdownMenu slot="list">
+            <DropdownItem name="log_out">退出登录</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </Header>
       <Breadcrumb :style="{margin: '24px 0 0',padding: '0 24px 24px'}">
         <BreadcrumbItem v-for="item in breadcumb" :key="item">{{ item }}</BreadcrumbItem>
@@ -41,12 +47,12 @@ export default {
   data () {
     return {
       isCollapsed: false,
-      admin: JSON.parse(localStorage.getItem('UesrMsg')).UserName
+      admin: JSON.parse(localStorage.getItem('UserMsg')).UserName
     }
   },
   computed: {
     ...mapState({
-      breadcumb: state => state.breadcumb
+      breadcumb: state => state.breadcumb,
     }),
     menuitemClasses: function () {
       return [
@@ -60,7 +66,7 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'handleBreadcumb'
+      'handleBreadcumb', 'userLogOut'
     ]),
     optionLink (e) {
       let n = ''
@@ -74,6 +80,14 @@ export default {
       }
       this.$router.push({name: e})
       this.handleBreadcumb(n)
+    },
+    userOperate (e) {
+      switch (e) {
+        case 'log_out':
+          this.userLogOut()
+          this.$router.push({ name: 'login' })
+          break
+      }
     }
   }
 }
@@ -130,6 +144,9 @@ export default {
   transition: font-size .2s ease .2s, transform .2s ease .2s;
   vertical-align: middle;
   font-size: 22px;
+}
+.dropDown{
+  text-align: center;
 }
 </style>
 

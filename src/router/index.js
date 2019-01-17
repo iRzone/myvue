@@ -13,8 +13,8 @@ const router =  new VueRouter({
     {
       path: '/',
       redirect: () => {
-        if (localStorage.getItem('UesrMsg')) {
-          return JSON.parse(localStorage.getItem('UesrMsg')).Admin === 1? 'admin_home': 'user_home'
+        if (localStorage.getItem('UserMsg')) {
+          return JSON.parse(localStorage.getItem('UserMsg')).Admin === 1? 'admin_home': 'user_home'
         } else {
           return '/login'
         }

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import cookie from 'js-cookie'
 
 Vue.use(Vuex)
 
@@ -21,6 +22,10 @@ const mutations = { // 自定义改变state初始值的方法，这里面的参�
   },
   clearBreadcumb: function (state) {
     state.breadcumb = []
+  },
+  userLogOut: function () {
+    cookie.remove('token')
+    localStorage.removeItem('UserMsg')
   }
 }
 
