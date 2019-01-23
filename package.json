@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "base-64": "^0.1.0",
     "iview": "^3.2.1",
+    "js-base64": "^2.5.1",
     "js-cookie": "^2.2.0",
     "jsonwebtoken": "^8.4.0",
     "less": "^3.9.0",
