@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal" title="修改用户信息" @on-ok="ok" @on-cancel="cancel">
+  <Modal v-model="modal" title="修改用户信息" @on-ok="ok" @on-cancel="cancel" :mask-closable="false">
     <Form ref="userForm" :model="userForm" :rules="ruleValidate" :label-width="80" style="width: 300px">
       <FormItem label="用户名：" prop="name">
         <Input v-model="userForm.UserName" placeholder="请输入用户名"></Input>
@@ -29,7 +29,7 @@
             :before-upload="handleBeforeUpload"
             type="drag"
             action="/smms"
-            style="display: inline-block;width:58px;" :header="requestHeader">
+            style="display: inline-block;width:58px;">
             <div style="width: 58px;height:58px;line-height: 58px;">
               <Icon type="ios-camera" size="20"></Icon>
             </div>
@@ -40,28 +40,30 @@
       </FormItem>
       <!-- vue-cropper -->
       <FormItem label="裁剪头像：">
-        <div class="">
-          <label class="btn" for="upload">
-            <Icon type="ios-camera" size="20"></Icon>
-          </label>
-          <input style="display:none;" type="file" id="upload" accept="image/png, image/jpeg, image/gif, image/jpg"  @change="uploadImg($event)">
-        </div>
-        <vueCropper :outputSize="1" :outputType="'png'" :autoCrop="true" :autoCropWidth="60" :autoCropHeight="60" :fixedBox="true" :centerBox="true"></vueCropper>
+        <label class="btn" @click="showClipModal = true">
+          <Icon type="ios-camera" size="20"></Icon>
+        </label>
+          <!-- <input style="display:none;" type="file" id="upload" accept="image/png, image/jpeg, image/gif, image/jpg"  @change="uploadImg($event)"> -->
+        <!-- <div class="cut">
+          <vueCropper :img="clipImg" :outputSize="1" :outputType="'png'" :autoCrop="true" :autoCropWidth="120" :autoCropHeight="120" :fixedBox="true" :centerBox="true"></vueCropper>
+        </div> -->
       </FormItem>
     </Form>
+    <clip-image v-model="showClipModal"></clip-image>
   </Modal>
 </template>
 
 <script>
-import { VueCropper } from 'vue-cropper'
-// import axios from 'axios' 
+// import axios from 'axios'
+import clipImage from '@/components/clip-image.vue'
 export default {
   components: {
-    VueCropper
+    clipImage
   },
   data () {
     return {
       modal: false,
+      showClipModal: false,
       userForm: {
         UserName: '',
         HeaderImg: ''
@@ -71,12 +73,10 @@ export default {
           { required: true, message: '用户名不能为空', trigger: 'blur' }
         ]
       },
+      // iview组件参数
       imgName: '',
       visible: false,
-      uploadList: [],
-      requestHeader: {
-        dataType: 'jsonp'
-      }
+      uploadList: []
     }
   },
   props: {
@@ -141,29 +141,6 @@ export default {
         title: '超过文件大小限制',
         desc: `抱歉，${file.name}太大，图片不可超过2M~`
       })
-    },
-    // 使用vue-cropper组件上传图片
-    uploadImg (event) {
-      if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(event.target.value)) {
-        this.$Message.error({
-          content: '图片类型必须是.gif,jpeg,jpg,png,bmp中的一种~',
-        })
-        return
-      } else if (event.target.files[0].size > 2097152) {
-        this.$Message.error({
-          content: '图片最大不可以超过2M~',
-        })
-        return
-      }
-      let file = event.target.files[0]
-      let reader = new FileReader()
-      reader.readAsDataURL(file)
-      // let params = {
-      //   smfile: event.target.files[0]
-      // }
-      // axios.post('/smms', params).then(res => {
-      //   console.log(res)
-      // })
     }
   }
 }
@@ -217,5 +194,10 @@ export default {
 }
 .btn:hover{
   border: 1px dashed #5cadff;
+}
+.cut {
+  width: 500px;
+  height: 500px;
+  margin: 30px auto;
 }
 </style>
