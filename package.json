@@ -16,6 +16,7 @@
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "mousetrap": "^1.6.2",
+    "smms": "^1.0.7",
     "vue": "^2.5.17",
     "vue-cropper": "^0.4.8",
     "vue-router": "^3.0.2",

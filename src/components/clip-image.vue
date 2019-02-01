@@ -33,8 +33,8 @@
 </template>
 
 <script>
+import uploadImg from 'smms'
 import { VueCropper } from 'vue-cropper'
-// import axios from 'axios'
 export default {
   components: {
     VueCropper
@@ -68,20 +68,18 @@ export default {
   methods: {
     ok () {
       // let aLink = document.createElement('a')
-      // const vm = this
-      // let params = {
-      //   smfile: vm.clipImg
-      // }
-      // axios.post('/smms', params).then(res => {
-      //   console.log(res)
-      // })
+      const vm = this
+      let smfile = vm.clipImg
+      uploadImg(smfile).then(res => {
+        console.log(res)
+      })
     },
     cancel () {
       this.$Message.info('Clicked cancel')
     },
     // 使用vue-cropper组件上传图片
     uploadImg (event) {
-      // console.log(event)
+      console.log(event.target.files[0])
       const vm = this
       if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(event.target.value)) {
         this.$Message.error({
@@ -105,6 +103,15 @@ export default {
     // 实时预览函数
     realTime (data) {
       this.previews = data
+    },
+    // js-base64转换为file对象
+    dataURLtoFile(dataurl, filename) { // 将base64转换为文件
+      let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n)
+      while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, {type:mime})
     }
   }
 }
