@@ -5,7 +5,7 @@
         <Input v-model="userForm.UserName" placeholder="请输入用户名"></Input>
       </FormItem>
       <!-- iview upload 组件 -->
-      <FormItem label="头像：">
+      <!-- <FormItem label="头像：">
         <div class="demo-upload-list" v-for="(item, index) in uploadList" :key="index">
           <template v-if="item.status === 'finished'">
             <img :src="item.url">
@@ -37,7 +37,7 @@
         <Modal title="View Image" v-model="visible">
           <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
         </Modal>
-      </FormItem>
+      </FormItem> -->
       <!-- vue-cropper -->
       <FormItem label="裁剪头像：">
         <label class="btn" @click="showClipModal = true">
@@ -99,6 +99,21 @@ export default {
       }
     }
   },
+  // mounted () {
+  //   console.log(JSON.stringify({
+  //     delete: "https://sm.ms/delete/Me756yn8TDBsihF",
+  //     filename: "iRzoneAvatar.jpg",
+  //     hash: "Me756yn8TDBsihF",
+  //     height: 165,
+  //     ip: "219.132.205.32",
+  //     path: "/2019/02/15/5c66688c7e1ed.jpg",
+  //     size: 63889,
+  //     storename: "5c66688c7e1ed.jpg",
+  //     timestamp: 1550215308,
+  //     url: "https://i.loli.net/2019/02/15/5c66688c7e1ed.jpg",
+  //     width: 165
+  //   }))
+  // },
   methods: {
     ok () {
       this.$Message.info('Clicked ok')

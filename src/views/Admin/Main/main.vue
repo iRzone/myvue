@@ -22,8 +22,8 @@
     <Layout>
       <Header class="layout-header-bar">
         <Dropdown class="dropDown" placement="bottom-start" @on-click="userOperate">
-          <Avatar src="https://i.loli.net/2019/01/11/5c384fc809967.jpg" />&nbsp;
-          管理员：{{ admin }}
+          <Avatar v-if="user.Avatar" :src="`https://i.loli.net/${user.Avatar.path}`" />&nbsp;
+          管理员：{{ user.UserName }}
           <Icon type="ios-arrow-down"></Icon>
           <DropdownMenu slot="list">
             <DropdownItem name="log_out">退出登录</DropdownItem>
@@ -47,7 +47,7 @@ export default {
   data () {
     return {
       isCollapsed: false,
-      admin: JSON.parse(localStorage.getItem('UserMsg')).UserName
+      user: {}
     }
   },
   computed: {
@@ -62,7 +62,8 @@ export default {
     }
   },
   mounted () {
-    // console.log(this)
+    const vm = this
+    vm.user = JSON.parse(localStorage.getItem('UserMsg'))
   },
   methods: {
     ...mapMutations([

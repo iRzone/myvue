@@ -34,6 +34,7 @@
 
 <script>
 import uploadImg from 'smms'
+// import util from '@/libs/util'
 import { VueCropper } from 'vue-cropper'
 export default {
   components: {
@@ -67,11 +68,18 @@ export default {
   },
   methods: {
     ok () {
-      // let aLink = document.createElement('a')
       const vm = this
-      let smfile = vm.clipImg
-      uploadImg(smfile).then(res => {
-        console.log(res)
+      // 开始截图
+      vm.$refs.cropper.startCrop()
+      // 获取截图的base64 数据
+      vm.$refs.cropper.getCropData((data) => {
+        // do something
+        console.log(data)
+        let userName = JSON.parse(localStorage.getItem('UserMsg')).UserName + 'Avatar'
+        uploadImg(vm.dataURLtoFile(data, userName)).then(res => {
+          console.log(res)
+          // util.updateAvatar().then(res => {})
+        })
       })
     },
     cancel () {
@@ -79,7 +87,6 @@ export default {
     },
     // 使用vue-cropper组件上传图片
     uploadImg (event) {
-      console.log(event.target.files[0])
       const vm = this
       if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(event.target.value)) {
         this.$Message.error({

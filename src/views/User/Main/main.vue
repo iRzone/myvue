@@ -21,11 +21,11 @@
             </MenuItem>
             <Submenu name="user_avatar">
               <template slot="title">
-                <Avatar src="https://i.loli.net/2019/01/11/5c384fc809967.jpg" />&nbsp;
-                {{ admin }}
+                <Avatar v-if="user.Avatar" :src="`https://i.loli.net/${user.Avatar.path}`" />&nbsp;
+                {{ user.UserName }}
               </template>
               <MenuGroup title="操作">
-                <MenuItem name="logOut">退出系统</MenuItem>
+                <MenuItem name="log_out">退出系统</MenuItem>
               </MenuGroup>
             </Submenu>
           </div>
@@ -56,7 +56,7 @@ export default {
     return{
       visible: false,
       thisYear: '',
-      admin: JSON.parse(localStorage.getItem('UserMsg')).UserName
+      user: {}
     }
   },
   computed: {
@@ -65,12 +65,14 @@ export default {
     })
   },
   mounted () {
-    this.getThisYear()
-    this.bindMousetrap()
+    const vm = this
+    vm.user = JSON.parse(localStorage.getItem('UserMsg'))
+    vm.getThisYear()
+    vm.bindMousetrap()
   },
   methods: {
     ...mapMutations([
-      'handleBreadcumb'
+      'handleBreadcumb', 'userLogOut'
     ]),
     bindMousetrap () {
       Mousetrap.bind('f2', () => {
@@ -88,6 +90,10 @@ export default {
           break
         case 'us':
           n = '关于我们'
+          break
+        case 'log_out':
+          this.userLogOut()
+          this.$router.push({ name: 'login' })
           break
       }
       if (e !== 'user_avatar') {
