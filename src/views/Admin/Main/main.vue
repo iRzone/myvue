@@ -42,18 +42,17 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
       isCollapsed: false,
-      user: {}
+      user: {},
+      breadcumb: []
     }
   },
+  // https://segmentfault.com/q/1010000011795481 面包屑导航
   computed: {
-    ...mapState({
-      breadcumb: state => state.breadcumb,
-    }),
     menuitemClasses: function () {
       return [
         'menu-item',
@@ -67,20 +66,10 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'handleBreadcumb', 'userLogOut'
+      'userLogOut'
     ]),
     optionLink (e) {
-      let n = ''
-      switch (e) {
-        case 'admin_home':
-          n = '首页'
-          break
-        case 'member':
-          n = '会员管理'
-          break
-      }
       this.$router.push({name: e})
-      this.handleBreadcumb(n)
     },
     userOperate (e) {
       switch (e) {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Table :columns="columns" :data="usersList"></Table>
-    <user-form v-model="showModal" :userInfo='userInfo'></user-form>
+    <user-form v-model="showModal" :userInfo='userInfo' @refresh="refreshList"></user-form>
   </div>
 </template>
 
@@ -17,6 +17,10 @@ export default {
       columns: [
         {
           title: 'ID',
+          key: 'ID'
+        },
+        {
+          title: '头像',
           key: 'ID'
         },
         {
@@ -71,14 +75,20 @@ export default {
       util.get('/users/list').then(res => {
         if (res.data.Code === 200) {
           this.usersList = res.data.Data
+          this.usersList.forEach(item => {
+            item.Avatar = JSON.parse(item.Avatar)
+          })
         }
       })
     },
     handleModal (e) {
       if (e) {
-        this.userInfo = e
+        this.userInfo = JSON.parse(JSON.stringify(e))
       }
       this.showModal = true
+    },
+    refreshList () {
+      this.getUserList()
     }
   }
 }

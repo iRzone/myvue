@@ -1,8 +1,8 @@
 <template>
   <Modal v-model="modal" title="修改用户信息" @on-ok="ok" @on-cancel="cancel" :mask-closable="false">
-    <Form ref="userForm" :model="userForm" :rules="ruleValidate" :label-width="80" style="width: 300px">
-      <FormItem label="用户名：" prop="name">
-        <Input v-model="userForm.UserName" placeholder="请输入用户名"></Input>
+    <Form ref="userInfo" :model="userInfo" :rules="ruleValidate" :label-width="80" style="width: 300px">
+      <FormItem label="用户名：" prop="UserName">
+        <Input v-if="userInfo" v-model="userInfo.UserName" placeholder="请输入用户名"></Input>
       </FormItem>
       <!-- iview upload 组件 -->
       <!-- <FormItem label="头像：">
@@ -39,9 +39,10 @@
         </Modal>
       </FormItem> -->
       <!-- vue-cropper -->
-      <FormItem label="裁剪头像：">
+      <FormItem label="上传头像：">
         <label class="btn" @click="showClipModal = true">
-          <Icon type="ios-camera" size="20"></Icon>
+          <img v-if="userInfo" :src="userInfo.Avatar.url">
+          <Icon v-else type="ios-camera" size="20"></Icon>
         </label>
           <!-- <input style="display:none;" type="file" id="upload" accept="image/png, image/jpeg, image/gif, image/jpg"  @change="uploadImg($event)"> -->
         <!-- <div class="cut">
@@ -49,12 +50,12 @@
         </div> -->
       </FormItem>
     </Form>
-    <clip-image v-model="showClipModal"></clip-image>
+    <clip-image v-model="showClipModal" @updateImg="updateImg"></clip-image>
   </Modal>
 </template>
 
 <script>
-// import axios from 'axios'
+import instance from '@/libs/util'
 import clipImage from '@/components/clip-image.vue'
 export default {
   components: {
@@ -64,12 +65,12 @@ export default {
     return {
       modal: false,
       showClipModal: false,
-      userForm: {
-        UserName: '',
-        HeaderImg: ''
-      },
+      // userForm: {
+      //   UserName: '',
+      //   HeaderImg: ''
+      // },
       ruleValidate: {
-        name: [
+        UserName: [
           { required: true, message: '用户名不能为空', trigger: 'blur' }
         ]
       },
@@ -99,24 +100,23 @@ export default {
       }
     }
   },
-  // mounted () {
-  //   console.log(JSON.stringify({
-  //     delete: "https://sm.ms/delete/Me756yn8TDBsihF",
-  //     filename: "iRzoneAvatar.jpg",
-  //     hash: "Me756yn8TDBsihF",
-  //     height: 165,
-  //     ip: "219.132.205.32",
-  //     path: "/2019/02/15/5c66688c7e1ed.jpg",
-  //     size: 63889,
-  //     storename: "5c66688c7e1ed.jpg",
-  //     timestamp: 1550215308,
-  //     url: "https://i.loli.net/2019/02/15/5c66688c7e1ed.jpg",
-  //     width: 165
-  //   }))
-  // },
   methods: {
     ok () {
-      this.$Message.info('Clicked ok')
+      const vm = this
+      let params = {
+        ID: vm.userInfo.ID,
+        UserName: vm.userInfo.UserName,
+        Avatar: JSON.stringify(vm.userInfo.Avatar)
+      }
+      instance.post('/users/update', params).then(res => {
+        if (res.data.Code === 200) {
+          vm.$Message.success({
+            content: '修改成功！'
+          })
+          vm.$emit('input', false)
+          vm.$emit('refresh')
+        }
+      })
     },
     cancel () {
       this.$Message.info('Clicked cancel')
@@ -127,13 +127,11 @@ export default {
       this.visible = true;
     },
     handleSuccess (res, file) {
-      console.log(res)
-      console.log(file)
       const vm = this
       if (res.code === 'success') {
         file.url = `https://i.loli.net${res.path}`
         file.name = res.storename
-        vm.userForm.HeaderImg = file.url
+        vm.userInfo.HeaderImg = file.url
       }
     },
     handleFormatError (file) {
@@ -156,6 +154,9 @@ export default {
         title: '超过文件大小限制',
         desc: `抱歉，${file.name}太大，图片不可超过2M~`
       })
+    },
+    updateImg (e) {
+      this.userInfo.Avatar = e.data
     }
   }
 }
@@ -206,6 +207,10 @@ export default {
   display: block;
   text-align: center;
   border-radius:2px;
+  > img{
+    width: 100%;
+    height: 100%;
+  }
 }
 .btn:hover{
   border: 1px dashed #5cadff;

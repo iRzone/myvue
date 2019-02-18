@@ -34,7 +34,6 @@
 
 <script>
 import uploadImg from 'smms'
-// import util from '@/libs/util'
 import { VueCropper } from 'vue-cropper'
 export default {
   components: {
@@ -59,6 +58,7 @@ export default {
   watch: {
     value: function (e) {
       this.mode = e
+      this.clipImg = ''
     },
     mode: function (e) {
       if (!e) {
@@ -74,11 +74,11 @@ export default {
       // 获取截图的base64 数据
       vm.$refs.cropper.getCropData((data) => {
         // do something
-        console.log(data)
+        // console.log(data)
         let userName = JSON.parse(localStorage.getItem('UserMsg')).UserName + 'Avatar'
         uploadImg(vm.dataURLtoFile(data, userName)).then(res => {
-          console.log(res)
-          // util.updateAvatar().then(res => {})
+          // console.log(res)
+          vm.$emit('updateImg', res)
         })
       })
     },
