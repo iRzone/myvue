@@ -30,9 +30,19 @@ const router =  new VueRouter({
   ]
 })
 
+let routeList = []
+
 router.beforeEach((to, from, next) => {
   // console.log(to)
   let token = cookie.get('token')
+  let idx = routeList.indexOf(to.name)
+  if (idx !== -1) {
+    //如果存在路由列表，则把之后的路由都删掉
+    routeList.splice(idx + 1, routeList.length - idx - 1)
+  } else {
+    routeList.push(to.name)
+  }
+  to.meta.routeList = routeList
   // console.log(token)
   if (!token && to.name !== 'login') {
     next({

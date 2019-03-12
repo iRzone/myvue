@@ -43,6 +43,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import adminRoute from '@/router/admin'
 export default {
   data () {
     return {
@@ -60,9 +61,25 @@ export default {
       ]
     }
   },
+  watch: {
+    '$route.meta.routeList': function (e) {
+      let arr = []
+      // console.log(e)
+      e.forEach(item => {
+         adminRoute.forEach(itm => {
+           if (itm.children[0].name === item) {
+             arr.push(itm.children[0].title)
+           }
+         })
+      })
+      this.breadcumb = arr
+      // console.log(arr)
+    }
+  },
   mounted () {
     const vm = this
     vm.user = JSON.parse(localStorage.getItem('UserMsg'))
+    // console.log(vm.$route)
   },
   methods: {
     ...mapMutations([

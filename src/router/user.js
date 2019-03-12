@@ -9,6 +9,7 @@ const user_routes = [
       {
         path: '',
         name: 'user_home',
+        title: '首页',
         component: resolve => require(['@/views/User/Home/home.vue'], resolve)
       }
     ]
@@ -20,6 +21,7 @@ const user_routes = [
       {
         path: '',
         name:  'us',
+        title: '关于我们',
         component: resolve => require(['@/views/User/AboutUs/about-us.vue'], resolve)
       }
     ]
@@ -31,6 +33,7 @@ const user_routes = [
       {
         path: '',
         name:  'new',
+        title: '沙雕新闻',
         component: resolve => require(['@/views/User/News/news.vue'], resolve)
       }
     ]

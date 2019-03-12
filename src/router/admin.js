@@ -9,6 +9,7 @@ const admin_routes = [
       {
         path: '',
         name: 'admin_home',
+        title: '首页',
         component: resolve => require(['@/views/Admin/Home/home.vue'], resolve)
       }
     ]
@@ -20,6 +21,7 @@ const admin_routes = [
       {
         path: '',
         name: 'member',
+        title: '会员管理',
         component: resolve => require(['@/views/Admin/Member/member.vue'], resolve)
       }
     ]

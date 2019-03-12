@@ -6,7 +6,12 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  watch: {
+    '$route' (e) {
+      console.log(e)
+    }
+  }
 }
 </script>
 
